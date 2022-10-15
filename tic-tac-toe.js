@@ -1,11 +1,4 @@
-// "use strict";
-
-
-
-
-// To load board 
 window.onload = gameboard;
-
 
 
 function gameboard(){
@@ -22,23 +15,28 @@ function gameboard(){
         [3,4,5],
         [6,7,8]
     ];
-    let stat=  document.getElementById('status');
-    
-    let O
-    
 
+    let X_or_O = '';
 
-    const x_o_board= document.getElementById("board");
-    O= false
-    for (let n = 0; n < 9; n++) {
-        x_o_board.children[n].classList.add("square"); 
-        console.log(x_o_board);
-        console.log(x_o_board.children[n]);
-    //    x_o_board.children[n].addEventListener('hover', hovering, {once: true});
-        x_o_board.children[n].addEventListener('click', clickMark, {once: true});
-        hovering();
+    let stat =  document.getElementById('status');
+    let O;
+    const x_o_board = document.getElementById("board");
+    const newGameButton = document.getElementsByClassName("btn");
+
+        O = false
+        for (let n = 0; n < 9; n++) {
+            x_o_board.children[n].classList.add("square"); 
+            console.log(x_o_board);
+            console.log(x_o_board.children[n]);
+            x_o_board.children[n].addEventListener('click', clickMark, {once: true});
+            hovering();
+            
     }
 
+// reset();
+
+
+//reset();
 
 // Making a mark 
 
@@ -52,12 +50,13 @@ function gameboard(){
 // to remove
 console.log(x_o_board);
 
+newGameButton[0].addEventListener('click', restart); 
 
 
 function clickMark(e) {
     console.log("before");
     const square = e.target;
-    const X_or_O = O ? o_team : x_team;
+    X_or_O = O ? o_team : x_team;
     mark(square, X_or_O);
     if (winnerCheck(X_or_O)){
         // WORKING 
@@ -73,6 +72,7 @@ function clickMark(e) {
      }
     turns()
     hovering()
+    resizeTo(square, X_or_O)
 }
 
 function mark(square, X_or_O){
@@ -84,6 +84,36 @@ function mark(square, X_or_O){
         square.classList.add("O")
         square.innerHTML= "O"
     }
+}
+
+function restart(){
+    O= false
+    const squares=  document.querySelectorAll('[square]');
+    console.log(squares);
+   // squares.forEach(box => {
+    for (let n = 0; n < 9; n++) {
+        squares[n].classList.remove(x_team)
+        squares[n].classList.remove(o_team)
+        squares[n].removeEventListener('click', clickMark)
+        squares[n].addEventListener('click', clickMark, {once: true});
+    }
+    hovering();
+    //
+    
+    //     x_o_board.children[n].classList.remove(o_team)
+    //     x_o_board.children[n].classList.remove(x_team)
+    //     // square.innerHTML = ""
+    //     x_o_board.children[n].removeEventListener('click', clickMark)
+    // }
+
+
+    // console.log(X_or_O);
+    // square.classList.remove(X_or_O)
+    // if (X_or_O.length > 0){
+    //     //square.innerHTML = ""
+    //     x_o_board.classList.remove(x_team);
+    //     x_o_board.classList.remove(o_team);
+    // }
 }
 
 function turns(){
@@ -111,7 +141,5 @@ function winnerCheck(X_or_O){
         })
     })
 }
-    
-
 
 }
